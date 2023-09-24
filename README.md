@@ -1,2 +1,2 @@
 # golang-Directory
-Golalng concepts code snippets
+Golang concepts code snippets
