@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -15,6 +16,8 @@ func main() {
 	urlPost := "http://localhost:3000/post"
 	handlePostReq(urlPost)
 
+	urlPostForm := "http://localhost:3000/postForm"
+	handlePostForm(urlPostForm)
 }
 
 func handleGetRequest(url string) {
@@ -56,4 +59,22 @@ func handlePostReq(url string) {
 	responseContent.Write(content)
 	fmt.Println("Repsonse : ", responseContent.String())
 
+}
+
+func handlePostForm(urlPostForm string) {
+	data := url.Values{}
+	data.Add("Name", "Mahesh")
+	data.Add("Present", "true")
+	fmt.Println("data content : ", data)
+	response, err := http.PostForm(urlPostForm, data)
+
+	if err != nil {
+		panic(err)
+	}
+	defer response.Body.Close()
+	content, _ := ioutil.ReadAll(response.Body)
+
+	var responseContent strings.Builder
+	responseContent.Write(content)
+	fmt.Println("response content : ", responseContent.String())
 }
