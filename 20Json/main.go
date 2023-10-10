@@ -15,6 +15,7 @@ type Student struct {
 func main() {
 	fmt.Println("Welcome to json studies")
 	handleJson()
+	decodeJson()
 }
 
 func handleJson() {
@@ -33,4 +34,33 @@ func handleJson() {
 	responseContent.Write(jsonData)
 	fmt.Println("json : ", responseContent.String())
 
+}
+
+func decodeJson() {
+
+	decodedJson := []byte(`
+	{
+			"Name": "Mahesh",
+			"Email": "mahesh@gmail.com",
+			"Tags": ["web","js"]
+	}`)
+	isValid := json.Valid(decodedJson)
+	var responseContent strings.Builder
+	if isValid {
+		fmt.Println("Json is valid")
+		var newStudent Student
+		json.Unmarshal(decodedJson, &newStudent)
+		responseContent.Write(decodedJson)
+		fmt.Println("new Student json : ", responseContent.String())
+
+	} else {
+		fmt.Println("Json is invalid")
+	}
+
+	//when you don't have struct defined
+
+	var jsonDataFromWeb map[string]interface{}
+	json.Unmarshal(decodedJson, &jsonDataFromWeb)
+	responseContent.Write(decodedJson)
+	fmt.Println("new Student json : ", responseContent.String())
 }
