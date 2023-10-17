@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -33,6 +34,22 @@ func isCourseEmpty(c Courses) bool {
 
 func main() {
 	fmt.Println("Welcome to build API")
+
+	courses = append(courses, Courses{CourseId: "2", CourseName: "Angular", Price: 800, Author: Author{AuthorName: "Nahesh More", Website: "go.dev"}})
+	courses = append(courses, Courses{CourseId: "3", CourseName: "React", Price: 900, Author: Author{AuthorName: "Nahesh More", Website: "go.dev"}})
+
+	//handlers
+	r := mux.NewRouter()
+	r.HandleFunc("/", serveHome).Methods("GET")
+	r.HandleFunc("/courses", getAllCourses).Methods("GET")
+	r.HandleFunc("/getCourse/{id}", getOneCourse).Methods("GET")
+	r.HandleFunc("/createCourse", createOneCourse).Methods("POST")
+	r.HandleFunc("/updateCourse", updateCourse).Methods("PUT")
+	r.HandleFunc("/deleteCourse", deleteCourse).Methods("DELETE")
+
+	//serve
+	log.Fatal(http.ListenAndServe(":4000", r))
+
 }
 
 //controllers
@@ -62,7 +79,7 @@ func getOneCourse(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func cerateOneCourse(w http.ResponseWriter, r *http.Request) {
+func createOneCourse(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
 	var course Courses
 	if r.Body == nil {
