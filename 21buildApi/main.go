@@ -109,7 +109,7 @@ func updateCourse(w http.ResponseWriter, r *http.Request) {
 		if courseInfo.CourseId == course.CourseId {
 			isCoursePresent = true
 			courses = append(courses[:index], courses[index+1:]...)
-			var newCourse Courses
+			var newCourse Courses = course
 			newCourse.CourseId = course.CourseId
 			courses = append(courses, newCourse)
 			json.NewEncoder(w).Encode(newCourse)
