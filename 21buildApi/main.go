@@ -105,3 +105,27 @@ func updateCourse(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+func deleteCourse(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Delete the course")
+	w.Header().Add("Content-Type", "application/json")
+	var course Courses
+	if r.Body == nil {
+		json.NewEncoder(w).Encode("Empty Payload")
+	}
+	json.NewDecoder(r.Body).Decode(&course)
+	isCoursePresent := false
+	for index, courseInfo := range courses {
+		if courseInfo.CourseId == course.CourseId {
+			isCoursePresent = true
+			courses = append(courses[:index], courses[index+1:]...)
+			json.NewEncoder(w).Encode("Successfully deleted the course")
+			break
+		}
+	}
+	if !isCoursePresent {
+		json.NewEncoder(w).Encode("No Course is present with give courseId")
+		return
+	}
+
+}
