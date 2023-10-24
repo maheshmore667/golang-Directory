@@ -7,6 +7,8 @@ import (
 )
 
 var wg sync.WaitGroup
+var mutex sync.Mutex
+var signals = []string{}
 
 func main() {
 	websites := []string{
@@ -28,6 +30,12 @@ func getStatusCode(webiste string) {
 	if err != nil {
 		panic(err)
 	} else {
+		//trying to lock the memory block for this operation using mutex
+		mutex.Lock()
+		signals = append(signals, webiste)
+		//trying to unlock the memory block which is reserved by mutex
+		mutex.Unlock()
 		fmt.Println("success!!", res.StatusCode)
+		fmt.Println(signals)
 	}
 }
